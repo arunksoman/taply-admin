@@ -5,8 +5,43 @@
     let txt_uname;
     let txt_passwd;
     // $: console.log(txt_uname, txt_passwd);
+    let url = 'http://127.0.0.1:5000/'
+    async function sendData(data){
+        const response = await fetch(url, {
+            method: 'POST',
+            mode: 'cors',
+            cache: 'no-cache',
+            credentials: 'same-origin',
+            headers: {
+                    'Content-Type': 'application/json'
+                    // 'Content-Type': 'application/x-www-form-urlencoded',
+                },
+            body: JSON.stringify(data)
+        });
+        return response;
+    }
     function onSubmit(event){
         console.log(txt_uname, txt_passwd);
+        var data = {
+            "username": txt_uname,
+            "passwd": txt_passwd
+        };
+        sendData(data).then(response => {
+            if (response.status == 200){
+                console.log("I got it");
+            }
+            if (response.status == 404){
+                console.log("Response is 404");
+            }
+            // if (!response.ok) {
+            //     throw new Error('Network response was not ok');
+            // }
+            return response.json();
+        }).then(result => {
+            console.log(result);
+        }).catch(error => {
+            console.error('There has been a problem with your fetch operation:', error);
+        });
     }
 </script>
 
